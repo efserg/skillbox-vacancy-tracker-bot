@@ -6,24 +6,27 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'io.freefair.lombok' version '8.4'
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 ext {
     telegramBotsVersion = '8.0.0'
     gsonVersion = '2.12.1'
+    lombokVersion = '1.18.30'
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:$gsonVersion'
+    implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "org.telegram:telegrambots-longpolling:$telegramBotsVersion"
     implementation "org.telegram:telegrambots-client:$telegramBotsVersion"
+
+    compileOnly 'org.projectlombok:lombok:$lombokVersion'
+    annotationProcessor 'org.projectlombok:lombok:$lombokVersion'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
