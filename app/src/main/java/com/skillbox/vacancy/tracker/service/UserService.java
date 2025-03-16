@@ -1,6 +1,6 @@
 package com.skillbox.vacancy.tracker.service;
 
-import com.skillbox.vacancy.tracker.repository.model.BotUser;
+import com.skillbox.vacancy.tracker.model.BotUser;
 
 public interface UserService {
     BotUser save(BotUser user);
@@ -11,5 +11,4 @@ public interface UserService {
 
     void delete(Long id);
 
-    BotUser update();
 }

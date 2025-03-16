@@ -1,18 +1,17 @@
 package com.skillbox.vacancy.tracker.bot;
 
-import java.util.List;
-
+import com.skillbox.vacancy.tracker.bot.command.UnknownCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class BotCommandExecutor {
-    private final List<BotCommand> commands;
 
+    private final BotCommandStorage commandStorage;
     private final UpdateMessageMapper messageMapper;
 
-    public BotCommandExecutor(List<BotCommand> commands) {
-        this.commands = commands;
-        messageMapper = new UpdateMessageMapper();
+    public BotCommandExecutor(BotCommandStorage commandStorage) {
+        this.commandStorage = commandStorage;
+        this.messageMapper = new UpdateMessageMapper();
     }
 
     public SendMessage execute(Update update) {
@@ -24,10 +23,10 @@ public class BotCommandExecutor {
                     .chatId(updateInfo.getChatId())
                     .build();
         }
-        return commands.stream()
+        return commandStorage.getCommandList().stream()
                 .filter(botCommand -> botCommand.isApply(message))
                 .findFirst()
-                .orElse(new HelpCommand())
+                .orElse(commandStorage.get(UnknownCommand.class))
                 .execute(updateInfo);
     }
 }

@@ -1,6 +1,7 @@
-package com.skillbox.vacancy.tracker.repository.model;
+package com.skillbox.vacancy.tracker.model;
 
 public enum TaskResultStatus {
+
     /**
      * Успешно выполнено
      */

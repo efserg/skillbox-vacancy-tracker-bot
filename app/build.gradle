@@ -18,15 +18,17 @@ ext {
     telegramBotsVersion = '8.0.0'
     gsonVersion = '2.12.1'
     lombokVersion = '1.18.30'
+    loggerVersion = '2.0.7'
 }
 
 dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "org.telegram:telegrambots-longpolling:$telegramBotsVersion"
     implementation "org.telegram:telegrambots-client:$telegramBotsVersion"
-
-    compileOnly 'org.projectlombok:lombok:$lombokVersion'
-    annotationProcessor 'org.projectlombok:lombok:$lombokVersion'
+    implementation "org.slf4j:slf4j-api:$loggerVersion"
+    implementation "org.slf4j:slf4j-simple:$loggerVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -39,4 +41,12 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'org.example.App'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Test).configureEach {
+    systemProperty "file.encoding", "UTF-8"
 }

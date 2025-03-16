@@ -1,12 +1,9 @@
-package com.skillbox.vacancy.tracker.repository.model;
+package com.skillbox.vacancy.tracker.model;
 
 import java.io.Serializable;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,27 +34,28 @@ public class BotUser implements Serializable {
     String username;
 
     /**
-     * Id чата, куда бот будет присылать обновления
+     * Смещение часового пояса пользователя от UTC
      */
-    Long chatId;
+    int offsetSeconds;
 
     /**
-     * Часовой пояс пользователя
+     * Список чатов, в которых пользователь подключил бота
      */
-    ZoneId zone;
-
-    /**
-     * Задания пользователя поиска вакансий для бота
-     */
-    List<UpdateTask> tasks;
+    List<Long> chats;
 
     public BotUser(Long id, String firstName, String lastName, String username, Long chatId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.chatId = chatId;
-        this.zone = ZoneOffset.UTC;
-        this.tasks = List.of();
+        this.offsetSeconds = 0; // UTC
+        addChat(chatId);
+    }
+
+    public void addChat(Long chatId) {
+        if (this.chats == null) {
+            this.chats = new ArrayList<>();
+        }
+        chats.add(chatId);
     }
 }

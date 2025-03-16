@@ -9,6 +9,6 @@ public class ConfigCliReader implements ConfigReader {
 
     @Override
     public Config read() {
-        return new Config(args[1], args[2]);
+        return new Config(args[0], args[1]);
     }
 }
