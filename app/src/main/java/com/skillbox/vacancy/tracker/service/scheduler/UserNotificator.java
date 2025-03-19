@@ -19,15 +19,14 @@ public class UserNotificator implements ScheduledTaskManager {
     private final TelegramClient telegramClient;
 
     @Override
-    public void scheduleTask(Long userId, Long chatId) {
+    public NotificationTask scheduleTask(Long userId, Long chatId) {
         final NotificationTask task = taskService.find(userId, chatId);
-        final LocalTime notificationTime = task.getNotificationTime();
+        final LocalTime notificationTime = task.getNotificationLocalTime();
+        if (notificationTime == null) {
+            return null;
+        }
         taskScheduler.scheduleDailyTask(notificationTime,
                 new UserNotificatorTask(userId, chatId, vacancyService, telegramClient));
-    }
-
-    @Override
-    public void removeTask(Long userId, Long chatId) {
-        taskScheduler.cancelTask(IdentifiableTask.getTaskId(userId, chatId));
+        return task;
     }
 }

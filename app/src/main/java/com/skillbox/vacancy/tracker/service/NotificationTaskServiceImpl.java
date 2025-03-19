@@ -20,4 +20,9 @@ public class NotificationTaskServiceImpl implements
     public void save(NotificationTask task) {
         repository.save(task);
     }
+
+    @Override
+    public boolean exists(Long userId, Long chatId) {
+        return repository.exists(userId, chatId);
+    }
 }

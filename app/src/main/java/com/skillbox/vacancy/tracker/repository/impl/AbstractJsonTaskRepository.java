@@ -38,6 +38,11 @@ public abstract class AbstractJsonTaskRepository<T extends BotTask>
     }
 
     @Override
+    public boolean exists(Long userId, Long chatId) {
+        return exists(getFileName(userId, chatId));
+    }
+
+    @Override
     protected abstract String getDirectoryPath();
 
     protected String getFileName(Long userId, Long chatId) {

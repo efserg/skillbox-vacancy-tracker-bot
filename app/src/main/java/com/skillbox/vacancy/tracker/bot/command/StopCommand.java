@@ -22,8 +22,7 @@ public class StopCommand implements BotCommand {
 
     @Override
     public SendMessage execute(TelegramUpdateInfo update) {
-        final String[] tokens = update.getMessage().split("\\s+");
-        if (tokens.length < 2) {
+        if (!update.hasParams()) {
             return SendMessage.builder()
                     .chatId(update.getChatId())
                     .replyMarkup(getKeyboardMarkup())
@@ -33,7 +32,7 @@ public class StopCommand implements BotCommand {
                             """)
                     .build();
         } else {
-            final String answer = tokens[1];
+            final String answer = update.getParams().get(1);
             if ("YES".equals(answer)) {
                 userService.delete(update.getUserId());
                 return SendMessage.builder()

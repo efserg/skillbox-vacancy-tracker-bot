@@ -30,6 +30,9 @@ public class NotificationTask implements Serializable, BotTask {
     /**
      * Время нотификации
      */
-    LocalTime notificationTime;
+    Integer notificationTime;
 
+    public LocalTime getNotificationLocalTime() {
+        return notificationTime == null ? null : LocalTime.ofSecondOfDay(notificationTime);
+    }
 }

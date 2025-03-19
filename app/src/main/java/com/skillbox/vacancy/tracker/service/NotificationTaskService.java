@@ -6,4 +6,7 @@ public interface NotificationTaskService {
     NotificationTask find(Long userId, Long chatId);
 
     void save(NotificationTask task);
+
+    boolean exists(Long userId, Long chatId);
+
 }

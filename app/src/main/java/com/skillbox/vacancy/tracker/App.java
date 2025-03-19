@@ -2,6 +2,12 @@ package com.skillbox.vacancy.tracker;
 
 import com.skillbox.vacancy.tracker.bot.BotCommandStorage;
 import com.skillbox.vacancy.tracker.bot.command.MainMenuCommand;
+import com.skillbox.vacancy.tracker.bot.command.ReadyCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetExperienceCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetKeywordCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetNotificationTimeCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetRegionCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetSalaryCommand;
 import com.skillbox.vacancy.tracker.bot.command.UnknownCommand;
 import com.skillbox.vacancy.tracker.model.FindVacancyTask;
 import com.skillbox.vacancy.tracker.model.NotificationTask;
@@ -65,26 +71,28 @@ public class App {
         final TaskScheduler taskScheduler = new TaskScheduler(scheduledExecutorService);
 
         final UserService userService = new UserServiceImpl(
-                taskScheduler,
-                userRepository,
+                taskScheduler, userRepository,
                 findVacancyTaskTaskRepository,
-                notificationTaskRepository,
-                vacancyRepository
-        );
+                notificationTaskRepository, vacancyRepository);
 
-        final ScheduledTaskManager scheduledTaskManager = new UserNotificator(
-                taskScheduler,
-                vacancyService,
-                notificationTaskService,
-                telegramClient
-        );
+        final UserNotificator userNotificator = new UserNotificator(
+                taskScheduler, vacancyService,
+                notificationTaskService, telegramClient);
 
-        final VacancyLoader vacancyLoader = new VacancyLoader(taskScheduler, vacancyService, findVacancyTaskService);
+        final VacancyLoader vacancyLoader = new VacancyLoader(
+                taskScheduler, vacancyService,
+                findVacancyTaskService);
 
-        final BotCommandStorage storage = new BotCommandStorage()
-                .put(new StopCommand(userService))
+        final BotCommandStorage storage = new BotCommandStorage();
+        storage.put(new StopCommand(userService))
                 .put(new StartCommand(userService))
-                .put(new MainMenuCommand());
+                .put(new MainMenuCommand(findVacancyTaskService, notificationTaskService))
+                .put(new SetRegionCommand(findVacancyTaskService, storage))
+                .put(new SetExperienceCommand(findVacancyTaskService, storage))
+                .put(new SetSalaryCommand(findVacancyTaskService, storage))
+                .put(new SetKeywordCommand(findVacancyTaskService, storage))
+                .put(new SetNotificationTimeCommand(notificationTaskService, storage))
+                .put(new ReadyCommand(userNotificator, vacancyLoader));
 
         final BotCommandExecutor commandExecutor = new BotCommandExecutor(storage);
 

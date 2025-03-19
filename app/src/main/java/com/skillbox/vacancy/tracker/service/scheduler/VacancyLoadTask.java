@@ -91,7 +91,7 @@ public class VacancyLoadTask implements IdentifiableTask {
 
         vacancyService.saveAll(userId, chatId, vacancyStream.collect(Collectors.toList()));
 
-        task.setUpdatedAt(Instant.now());
+        task.setUpdatedAt(Instant.now().getEpochSecond());
         task.setStatus(TaskResultStatus.SUCCESS);
         taskService.save(task);
     }
@@ -110,11 +110,10 @@ public class VacancyLoadTask implements IdentifiableTask {
     private String buildParams(FindVacancyTask task) {
         final String lastUpdatedValue = task.getUpdatedAt() == null
                 ? null
-                : (task.getUpdatedAt().atOffset(ZoneOffset.UTC)
+                : (Instant.ofEpochSecond(task.getUpdatedAt()).atOffset(ZoneOffset.UTC)
                         .format(DateTimeFormatter.ISO_INSTANT));
         return Stream.of(
                         formatParam("experienceFrom", task.getExperienceFrom()),
-                        formatParam("experienceTo", task.getExperienceTo()),
                         formatParam("text", task.getKeyword()),
                         formatParam("modifiedFrom", lastUpdatedValue),
                         formatParam("limit", PAGE_SIZE)

@@ -1,9 +1,9 @@
 package com.skillbox.vacancy.tracker.service.scheduler;
 
+import com.skillbox.vacancy.tracker.model.BotTask;
+
 public interface ScheduledTaskManager {
 
-    void scheduleTask(Long userId, Long chatId);
-
-    void removeTask(Long userId, Long chatId);
+    BotTask scheduleTask(Long userId, Long chatId);
 
 }

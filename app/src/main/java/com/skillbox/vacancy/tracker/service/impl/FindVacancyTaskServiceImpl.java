@@ -19,4 +19,9 @@ public class FindVacancyTaskServiceImpl implements FindVacancyTaskService {
     public void save(FindVacancyTask task) {
         repository.save(task);
     }
+
+    @Override
+    public boolean exists(Long userId, Long chatId) {
+        return repository.exists(userId, chatId);
+    }
 }

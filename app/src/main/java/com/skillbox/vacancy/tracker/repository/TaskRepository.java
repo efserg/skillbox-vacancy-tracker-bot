@@ -13,4 +13,5 @@ public interface TaskRepository<T extends BotTask> {
 
     void delete(Long userId, Long chatId);
 
+    boolean exists(Long userId, Long chatId);
 }

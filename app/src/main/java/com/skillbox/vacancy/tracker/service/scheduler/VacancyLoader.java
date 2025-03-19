@@ -1,5 +1,6 @@
 package com.skillbox.vacancy.tracker.service.scheduler;
 
+import com.skillbox.vacancy.tracker.model.FindVacancyTask;
 import com.skillbox.vacancy.tracker.service.FindVacancyTaskService;
 import com.skillbox.vacancy.tracker.service.VacancyService;
 import java.net.http.HttpClient;
@@ -17,15 +18,10 @@ public class VacancyLoader implements ScheduledTaskManager {
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     @Override
-    public void scheduleTask(Long userId, Long chatId) {
+    public FindVacancyTask scheduleTask(Long userId, Long chatId) {
         final VacancyLoadTask task = new VacancyLoadTask(userId, chatId, HTTP_CLIENT, vacancyService,
                 vacancyTaskService);
         taskScheduler.scheduleDailyTask(LocalTime.of(23, 0), task);
+        return vacancyTaskService.find(userId, chatId);
     }
-
-    @Override
-    public void removeTask(Long userId, Long chatId) {
-        taskScheduler.cancelTask(IdentifiableTask.getTaskId(userId, chatId));
-    }
-
 }
