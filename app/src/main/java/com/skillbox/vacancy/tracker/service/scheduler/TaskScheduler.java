@@ -35,7 +35,7 @@ public class TaskScheduler {
     }
 
     private long calculateInitialDelay(LocalTime targetTime) {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextRun = now.with(targetTime);
 
         if (now.isAfter(nextRun)) {

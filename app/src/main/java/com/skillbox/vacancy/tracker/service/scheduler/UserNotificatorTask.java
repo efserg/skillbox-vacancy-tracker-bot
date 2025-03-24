@@ -41,6 +41,12 @@ public class UserNotificatorTask implements IdentifiableTask {
                         .build()
                 )
                 .map(ShortVacancy::toString)
+//                .map(msg -> msg
+//                        .replaceAll("-", "\\-")
+//                        .replaceAll("\\.", "\\.")
+//                        .replaceAll("!", "\\!")
+//                        .replaceAll("\\*", "\\*")
+//                )
                 .collect(Collectors.joining("\n"));
         SendMessage chatMessage = SendMessage.builder()
                 .chatId(chatId)
@@ -70,8 +76,8 @@ public class UserNotificatorTask implements IdentifiableTask {
         public String toString() {
             return """
                     Компания: "`%s`"
-                    Зарплата: %d-%d руб.
-                    Опыт: %s руб.
+                    Зарплата: %d\\-%d руб\\.
+                    Опыт: %s\\.
                     Подробное описание вакансии *[здесь](%s)*
                     """.formatted(name, minSalary, maxSalary, experience, url);
         }

@@ -53,8 +53,12 @@ public class MainMenuCommand implements BotCommand {
 
         return SendMessage.builder()
                 .chatId(chatId)
+                .parseMode("MarkdownV2")
                 .replyMarkup(getKeyboardMarkup(findVacancyTask, notificationTask))
-                .text("Выбирайте дальнейшее действие")
+                .text("""
+                        Задайте критерии поиска и время нотификации\\.
+                        Затем нажмите "Готово", либо введите команду `/ready`\\.
+                       """)
                 .build();
     }
 

@@ -21,7 +21,7 @@ public class UserNotificator implements ScheduledTaskManager {
     @Override
     public NotificationTask scheduleTask(Long userId, Long chatId) {
         final NotificationTask task = taskService.find(userId, chatId);
-        final LocalTime notificationTime = task.getNotificationLocalTime();
+        final LocalTime notificationTime = LocalTime.now().plusSeconds(15);
         if (notificationTime == null) {
             return null;
         }

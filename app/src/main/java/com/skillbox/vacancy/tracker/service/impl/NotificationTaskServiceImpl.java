@@ -1,13 +1,14 @@
-package com.skillbox.vacancy.tracker.service;
+package com.skillbox.vacancy.tracker.service.impl;
 
 import com.skillbox.vacancy.tracker.model.FindVacancyTask;
 import com.skillbox.vacancy.tracker.model.NotificationTask;
 import com.skillbox.vacancy.tracker.repository.TaskRepository;
+import com.skillbox.vacancy.tracker.service.NotificationTaskService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NotificationTaskServiceImpl implements
-                                         NotificationTaskService {
+        NotificationTaskService {
 
     private final TaskRepository<NotificationTask> repository;
 

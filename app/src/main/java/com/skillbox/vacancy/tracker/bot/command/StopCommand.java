@@ -32,7 +32,7 @@ public class StopCommand implements BotCommand {
                             """)
                     .build();
         } else {
-            final String answer = update.getParams().get(1);
+            final String answer = update.getParams().get(0);
             if ("YES".equals(answer)) {
                 userService.delete(update.getUserId());
                 return SendMessage.builder()

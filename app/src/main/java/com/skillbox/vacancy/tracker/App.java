@@ -8,7 +8,7 @@ import com.skillbox.vacancy.tracker.bot.command.SetKeywordCommand;
 import com.skillbox.vacancy.tracker.bot.command.SetNotificationTimeCommand;
 import com.skillbox.vacancy.tracker.bot.command.SetRegionCommand;
 import com.skillbox.vacancy.tracker.bot.command.SetSalaryCommand;
-import com.skillbox.vacancy.tracker.bot.command.UnknownCommand;
+import com.skillbox.vacancy.tracker.bot.command.SetTimeZoneCommand;
 import com.skillbox.vacancy.tracker.model.FindVacancyTask;
 import com.skillbox.vacancy.tracker.model.NotificationTask;
 import com.skillbox.vacancy.tracker.repository.TaskRepository;
@@ -20,23 +20,20 @@ import com.skillbox.vacancy.tracker.repository.impl.JsonVacancyRepository;
 import com.skillbox.vacancy.tracker.repository.impl.JsonVacancyTaskRepository;
 import com.skillbox.vacancy.tracker.service.FindVacancyTaskService;
 import com.skillbox.vacancy.tracker.service.NotificationTaskService;
-import com.skillbox.vacancy.tracker.service.NotificationTaskServiceImpl;
+import com.skillbox.vacancy.tracker.service.impl.NotificationTaskServiceImpl;
 import com.skillbox.vacancy.tracker.service.UserService;
 import com.skillbox.vacancy.tracker.service.VacancyService;
 import com.skillbox.vacancy.tracker.service.impl.FindVacancyTaskServiceImpl;
 import com.skillbox.vacancy.tracker.service.impl.VacancyServiceImpl;
-import com.skillbox.vacancy.tracker.service.scheduler.ScheduledTaskManager;
 import com.skillbox.vacancy.tracker.service.scheduler.TaskScheduler;
 import com.skillbox.vacancy.tracker.service.scheduler.UserNotificator;
 import com.skillbox.vacancy.tracker.service.scheduler.VacancyLoader;
-import java.util.List;
 
-import java.util.concurrent.ExecutorService;
+import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
-import com.skillbox.vacancy.tracker.bot.command.BotCommand;
 import com.skillbox.vacancy.tracker.bot.BotCommandExecutor;
 import com.skillbox.vacancy.tracker.bot.command.StartCommand;
 import com.skillbox.vacancy.tracker.bot.command.StopCommand;
@@ -85,13 +82,14 @@ public class App {
 
         final BotCommandStorage storage = new BotCommandStorage();
         storage.put(new StopCommand(userService))
-                .put(new StartCommand(userService))
+                .put(new StartCommand(userService, findVacancyTaskService))
                 .put(new MainMenuCommand(findVacancyTaskService, notificationTaskService))
                 .put(new SetRegionCommand(findVacancyTaskService, storage))
                 .put(new SetExperienceCommand(findVacancyTaskService, storage))
                 .put(new SetSalaryCommand(findVacancyTaskService, storage))
                 .put(new SetKeywordCommand(findVacancyTaskService, storage))
                 .put(new SetNotificationTimeCommand(notificationTaskService, storage))
+                .put(new SetTimeZoneCommand(userService, storage))
                 .put(new ReadyCommand(userNotificator, vacancyLoader));
 
         final BotCommandExecutor commandExecutor = new BotCommandExecutor(storage);
@@ -99,6 +97,7 @@ public class App {
         try (var botsApplication = new TelegramBotsLongPollingApplication()) {
             botsApplication.registerBot(botToken, new VacancyTrackerBot(telegramClient, commandExecutor));
             System.out.println("Bot is running!");
+            userNotificator.scheduleTask(198568064L, 198568064L);
             Thread.currentThread().join();
         } catch (Exception e) {
             throw new RuntimeException(e);
