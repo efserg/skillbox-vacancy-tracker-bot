@@ -41,12 +41,6 @@ public class UserNotificatorTask implements IdentifiableTask {
                         .build()
                 )
                 .map(ShortVacancy::toString)
-//                .map(msg -> msg
-//                        .replaceAll("-", "\\-")
-//                        .replaceAll("\\.", "\\.")
-//                        .replaceAll("!", "\\!")
-//                        .replaceAll("\\*", "\\*")
-//                )
                 .collect(Collectors.joining("\n"));
         SendMessage chatMessage = SendMessage.builder()
                 .chatId(chatId)

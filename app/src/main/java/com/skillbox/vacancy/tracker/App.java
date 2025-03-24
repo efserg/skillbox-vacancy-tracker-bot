@@ -97,7 +97,6 @@ public class App {
         try (var botsApplication = new TelegramBotsLongPollingApplication()) {
             botsApplication.registerBot(botToken, new VacancyTrackerBot(telegramClient, commandExecutor));
             System.out.println("Bot is running!");
-            userNotificator.scheduleTask(198568064L, 198568064L);
             Thread.currentThread().join();
         } catch (Exception e) {
             throw new RuntimeException(e);

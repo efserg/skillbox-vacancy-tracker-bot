@@ -22,7 +22,7 @@ public class VacancyLoader implements ScheduledTaskManager {
     public FindVacancyTask scheduleTask(Long userId, Long chatId) {
         final VacancyLoadTask task = new VacancyLoadTask(userId, chatId, HTTP_CLIENT, vacancyService,
                 vacancyTaskService);
-        taskScheduler.scheduleDailyTask(LocalTime.now().plusMinutes(3), task);
+        taskScheduler.scheduleDailyTask(LocalTime.of(23, 0), task);
         return vacancyTaskService.find(userId, chatId);
     }
 }

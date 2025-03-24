@@ -1,5 +1,7 @@
 package com.skillbox.vacancy.tracker.service.scheduler;
 
+import static java.time.ZoneOffset.UTC;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -35,7 +37,7 @@ public class TaskScheduler {
     }
 
     private long calculateInitialDelay(LocalTime targetTime) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(UTC);
         LocalDateTime nextRun = now.with(targetTime);
 
         if (now.isAfter(nextRun)) {
